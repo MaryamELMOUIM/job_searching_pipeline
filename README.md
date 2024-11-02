@@ -2,6 +2,8 @@
 # Job Searching Pipeline
 
 This project is a job searching and tracking pipeline built using Flask, PostgreSQL, and Jooble API integration. It allows users to search, filter, and manage job listings, including scheduling interviews and updating job statuses. The app also includes an automated job fetch scheduler.
+![job_fetch_pipeline drawio (1)](https://github.com/user-attachments/assets/0ce7a07d-2e19-4549-b6fb-f72493832376)
+
 
 ## Table of Contents
 
