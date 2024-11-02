@@ -1,0 +1,145 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F2F2F2;
+    color: #2B6777;
+}
+
+/* Navbar Buttons */
+nav a.btn {
+    margin-right: 8px;
+    border-radius: 5px;
+    color: white;
+}
+
+nav a.btn-primary {
+    background-color: #2B6777;
+    border-color: #2B6777;
+}
+
+nav a.btn-secondary {
+    background-color: #C8D8E4;
+    border-color: #C8D8E4;
+    color: #2B6777;
+}
+
+nav a.btn:hover {
+    opacity: 0.9;
+}
+
+/* Filter and Clear Filter Buttons */
+form .btn-primary {
+    background-color: #52AB98;
+    border-color: #52AB98;
+    color: white;
+    margin-right: 8px;
+}
+
+form .btn-secondary {
+    background-color: #2B6777;
+    border-color: #2B6777;
+    color: white;
+}
+
+/* Table Styling */
+table.table {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+thead.thead-dark th {
+    background-color: #2B6777;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+/* Update and Delete Buttons in Actions Column */
+.btn-success {
+    background-color: #52AB98; /* Modern Green for "Update" button */
+    border-color: #52AB98;
+    color: white;
+    margin-right: 4px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.btn-danger {
+    background-color: #EA4335; /* Red for "Delete" button */
+    border-color: #EA4335;
+    color: white;
+    border-radius: 5px;
+}
+
+.btn-success:hover, .btn-danger:hover {
+    opacity: 0.9;
+}
+
+/* Dropdown for Status */
+select.form-control {
+    border-radius: 5px;
+    border: 1px solid #C8D8E4;
+}
+
+/* Pagination Styling */
+.pagination .page-link {
+    color: #2B6777;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #2B6777;
+    border-color: #2B6777;
+    color: white;
+}
+
+.pagination .page-link:hover {
+    color: #2B6777;
+    background-color: #C8D8E4;
+}
+
+/* Filter Form Styling */
+form.form-inline .form-control {
+    border-radius: 5px;
+    margin-right: 8px;
+    border: 1px solid #C8D8E4;
+}
+
+.form-inline .btn {
+    margin-top: 8px;
+}
+/* Add this CSS to your stylesheet */
+.action-buttons {
+    display: flex;
+    gap: 10px;  /* Adds space between the buttons */
+    justify-content: start;  /* Aligns the buttons to start from the same place */
+}
+
+.action-buttons button {
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-schedule {
+    background-color: #52ab98;
+    color: white;
+    border: none;
+}
+
+.btn-delete {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+}
+
+/* Optional hover effect */
+.btn-schedule:hover {
+    background-color: #429d88;
+}
+
+.btn-delete:hover {
+    background-color: #c9302c;
+}
+

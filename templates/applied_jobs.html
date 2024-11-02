@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Applied Jobs</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+    
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Applied Jobs</h1>
+
+        <!-- Navigation Buttons -->
+        <nav class="mb-4">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">All Jobs</a>
+            <a href="{{ url_for('applied_jobs') }}" class="btn btn-primary">Applied Jobs</a>
+            <a href="{{ url_for('interview_scheduled_jobs') }}" class="btn btn-secondary">Interview Scheduled Jobs</a>
+            <a href="{{ url_for('search') }}" class="btn btn-secondary">Search for Jobs</a>
+        </nav>
+
+        <!-- Filter Form -->
+        <form action="{{ url_for('applied_jobs') }}" method="get" class="form-inline mb-4">
+            <div class="form-group mr-3">
+                <input type="text" name="title" placeholder="Filter by Job Title" value="{{ title_filter }}" class="form-control">
+            </div>
+            <div class="form-group mr-3">
+                <input type="text" name="location" placeholder="Filter by Location" value="{{ location_filter }}" class="form-control">
+            </div>
+            <div class="form-group mr-3">
+                <input type="date" name="date_posted" value="{{ date_filter }}" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="{{ url_for('applied_jobs') }}" class="btn btn-secondary ml-2">Clear Filters</a>
+        </form>
+
+        <!-- Job Table -->
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Title</th>
+                    <th>Company</th>
+                    <th>Location</th>
+                    <th>Date Posted</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for job in jobs.items %}
+                <tr>
+                    <td><a href="{{ job.url }}" target="_blank">{{ job.title }}</a></td>
+                    <td>{{ job.company }}</td>
+                    <td>{{ job.location }}</td>
+                    <td>{{ job.date_posted }}</td>
+                    <td>
+                        <!-- Schedule Interview Button to trigger the modal -->
+                        <button class="btn btn-success" data-toggle="modal" data-target="#scheduleInterviewModal" 
+                                data-job-id="{{ job.id }}" data-job-title="{{ job.title }}" data-job-company="{{ job.company }}">
+                            Schedule Interview
+                        </button>
+                        <form action="{{ url_for('delete_job', job_id=job.id) }}" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-danger btn-sm ml-2" onclick="return confirm('Are you sure you want to delete this job?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination Controls -->
+        <nav>
+            <ul class="pagination">
+                {% if jobs.has_prev %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('applied_jobs', page=1) }}">First</a></li>
+                    <li class="page-item"><a class="page-link" href="{{ url_for('applied_jobs', page=jobs.prev_num) }}">Previous</a></li>
+                {% endif %}
+                
+                {% for page_num in range(1, jobs.pages + 1) %}
+                    <li class="page-item {% if page_num == jobs.page %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('applied_jobs', page=page_num) }}">{{ page_num }}</a>
+                    </li>
+                {% endfor %}
+                
+                {% if jobs.has_next %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('applied_jobs', page=jobs.next_num) }}">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="{{ url_for('applied_jobs', page=jobs.pages) }}">Last</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <!-- Schedule Interview Modal -->
+        <div class="modal fade" id="scheduleInterviewModal" tabindex="-1" aria-labelledby="scheduleInterviewLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="{{ url_for('schedule_interview') }}" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="scheduleInterviewLabel">Schedule Interview</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Job Title:</strong> <span id="modalJobTitle"></span></p>
+                            <p><strong>Company:</strong> <span id="modalJobCompany"></span></p>
+                            <input type="hidden" name="job_id" id="modalJobId">
+                            <div class="form-group">
+                                <label for="interview_date">Interview Date:</label>
+                                <input type="date" id="interview_date" name="interview_date" required class="form-control">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Schedule Interview</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to populate modal with job details
+        $('#scheduleInterviewModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);  // Button that triggered the modal
+            var jobId = button.data('job-id');    // Extract job ID from data-* attributes
+            var jobTitle = button.data('job-title');
+            var jobCompany = button.data('job-company');
+            
+            // Update the modal's content
+            var modal = $(this);
+            modal.find('#modalJobId').val(jobId);
+            modal.find('#modalJobTitle').text(jobTitle);
+            modal.find('#modalJobCompany').text(jobCompany);
+        });
+    </script>
+</body>
+</html>

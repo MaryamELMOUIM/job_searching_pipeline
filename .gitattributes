@@ -1,0 +1,9 @@
+# Ensure all text files use LF endings
+* text=auto
+
+# Specific treatment for Python files (if needed)
+*.py text eol=lf
+
+# Specific treatment for Windows-based files (e.g., batch scripts)
+*.bat text eol=crlf
+*.ps1 text eol=crlf

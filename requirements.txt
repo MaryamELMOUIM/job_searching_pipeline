@@ -1,0 +1,11 @@
+Flask==2.0.1
+Werkzeug==2.0.3
+Flask-SQLAlchemy==2.5.1
+SQLAlchemy==1.4.22
+psycopg2-binary==2.9.1
+requests==2.26.0
+APScheduler==3.7.0
+python-dotenv==0.19.0
+Flask-Migrate==3.1.0
+python-dateutil==2.8.2
+python-dotenv

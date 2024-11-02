@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interview Scheduled Jobs</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Interview Scheduled Jobs</h1>
+
+        <!-- Navigation Buttons -->
+        <nav class="mb-4">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">All Jobs</a>
+            <a href="{{ url_for('applied_jobs') }}" class="btn btn-secondary">Applied Jobs</a>
+            <a href="{{ url_for('interview_scheduled_jobs') }}" class="btn btn-primary">Interview Scheduled Jobs</a>
+            <a href="{{ url_for('search') }}" class="btn btn-secondary">Search for Jobs</a>
+        </nav>
+
+        <!-- Filter Form -->
+        <form action="{{ url_for('interview_scheduled_jobs') }}" method="get" class="form-inline mb-4">
+            <div class="form-group mr-3">
+                <input type="text" name="title" placeholder="Filter by Job Title" value="{{ title_filter }}" class="form-control">
+            </div>
+            <div class="form-group mr-3">
+                <input type="text" name="location" placeholder="Filter by Location" value="{{ location_filter }}" class="form-control">
+            </div>
+            <div class="form-group mr-3">
+                <input type="date" name="date_posted" value="{{ date_filter }}" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="{{ url_for('interview_scheduled_jobs') }}" class="btn btn-secondary ml-2">Clear Filters</a>
+        </form>
+
+        <!-- Job Table -->
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Title</th>
+                    <th>Company</th>
+                    <th>Location</th>
+                    <th>Date Posted</th>
+                    <th>Interview Date</th>
+                    <th>Interview Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for job in jobs.items %}
+                <tr>
+                    <td><a href="{{ job.url }}" target="_blank">{{ job.title }}</a></td>
+                    <td>{{ job.company }}</td>
+                    <td>{{ job.location }}</td>
+                    <td>{{ job.date_posted }}</td>
+                    <td>{{ job.interview_date.strftime('%B %d, %Y') if job.interview_date else "Not Set" }}</td>
+                    <td>{{ job.interview_status or "Pending" }}</td>
+                    <td>
+                        <form action="{{ url_for('update_interview_status', job_id=job.id) }}" method="post" class="form-inline">
+                            <select name="interview_status" class="form-control mr-2">
+                                <option value="Pending" {% if job.interview_status == 'Pending' %}selected{% endif %}>Pending</option>
+                                <option value="Passed" {% if job.interview_status == 'Passed' %}selected{% endif %}>Passed</option>
+                                <option value="Failed" {% if job.interview_status == 'Failed' %}selected{% endif %}>Failed</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                        </form>
+                        <form action="{{ url_for('delete_job', job_id=job.id) }}" method="post" class="form-inline mt-2">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination Controls -->
+        <nav>
+            <ul class="pagination">
+                {% if jobs.has_prev %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('interview_scheduled_jobs', page=1, location=location_filter) }}">First</a></li>
+                    <li class="page-item"><a class="page-link" href="{{ url_for('interview_scheduled_jobs', page=jobs.prev_num, location=location_filter) }}">Previous</a></li>
+                {% endif %}
+                
+                {% for page_num in range(1, jobs.pages + 1) %}
+                    <li class="page-item {% if page_num == jobs.page %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('interview_scheduled_jobs', page=page_num, location=location_filter) }}">{{ page_num }}</a>
+                    </li>
+                {% endfor %}
+                
+                {% if jobs.has_next %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('interview_scheduled_jobs', page=jobs.next_num, location=location_filter) }}">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="{{ url_for('interview_scheduled_jobs', page=jobs.pages, location=location_filter) }}">Last</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>
